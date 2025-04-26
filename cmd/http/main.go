@@ -1,14 +1,16 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/joqd/user-auth/internal/config"
+	"github.com/joqd/authify/internal/adapter/config"
+	"github.com/joqd/authify/internal/adapter/server"
+	"github.com/joqd/authify/internal/adapter/storage/postgres"
 )
 
 
 func main() {
-	config := config.LoadConfig()
+	conf := config.LoadConfig()
+	db := postgres.NewPostgresDatabase(conf)
+	server := server.NewServer(conf, db)
 
-	fmt.Println(config)
+	server.Start()
 }

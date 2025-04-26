@@ -6,7 +6,7 @@ vars:
   GREETING: Hello, World!
 
 tasks:
-  run:
+  dev:
     cmds:
       - go run ./cmd/http/main.go
     silent: true

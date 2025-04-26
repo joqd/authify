@@ -2,8 +2,8 @@ package domain
 
 import "time"
 
-type RefreshToken struct {
+type AccessToken struct {
 	Token     string
 	ExpiresAt time.Time
-	UserID    int64
+	UserID    uint64
 }

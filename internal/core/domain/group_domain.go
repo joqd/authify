@@ -1,7 +1,7 @@
 package domain
 
 type Group struct {
-	ID          int
+	ID          uint
 	Name        string
 	Permissions []Permission
 }

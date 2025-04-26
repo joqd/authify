@@ -1,10 +1,12 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type UserActivity struct {
-	ID        int64
-	UserID    int64
+	ID        uint64
+	UserID    uint64
 	Event     string
 	CreatedAt time.Time
 }

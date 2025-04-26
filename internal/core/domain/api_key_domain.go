@@ -6,6 +6,6 @@ type APIKey struct {
 	Key       string
 	Secret    string
 	Owner     string
-	CreatedAt time.Time
 	ExpiresAt time.Time
+	CreatedAt time.Time
 }

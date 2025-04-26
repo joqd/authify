@@ -1,7 +1,7 @@
 package domain
 
 type Permission struct {
-	ID          int
+	ID          uint
 	Name        string
 	CodeName    string
 	Description *string

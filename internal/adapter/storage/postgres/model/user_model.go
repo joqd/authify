@@ -2,8 +2,6 @@ package model
 
 import (
 	"time"
-
-	"github.com/joqd/authify/internal/core/domain"
 )
 
 type UserModel struct {
@@ -25,62 +23,4 @@ type UserModel struct {
 
 func (UserModel) TableName() string {
 	return "users"
-}
-
-func DBToDomainUser(user *UserModel) *domain.User {
-	permissions := make([]domain.Permission, len(user.Permissions))
-	groups := make([]domain.Group, len(user.Groups))
-
-	for i, p := range user.Permissions {
-		permissions[i] = *DBToDomainPermission(&p)
-	}
-
-	for i, g := range user.Groups {
-		groups[i] = *DBToDomainGroup(&g)
-	}
-
-	return &domain.User{
-		ID:              user.ID,
-		Username:        user.Username,
-		FirstName:       user.FirstName,
-		LastName:        user.LastName,
-		PasswordHash:    user.PasswordHash,
-		Groups:          groups,
-		Permissions:     permissions,
-		IsStaff:         user.IsStaff,
-		IsActive:        user.IsActive,
-		IsSuperuser:     user.IsSuperuser,
-		IsEmailVerified: user.IsEmailVerified,
-		LastLogin:       user.LastLogin,
-		DateJoined:      user.DateJoined,
-	}
-}
-
-func DomainToDBUser(user *domain.User) *UserModel {
-	permissions := make([]PermissionModel, len(user.Permissions))
-	groups := make([]GroupModel, len(user.Groups))
-
-	for i, p := range user.Permissions {
-		permissions[i] = *DomainToDBPermission(&p)
-	}
-
-	for i, g := range user.Groups {
-		groups[i] = *DomainToDBGroup(&g)
-	}
-
-	return &UserModel{
-		ID:              user.ID,
-		Username:        user.Username,
-		FirstName:       user.FirstName,
-		LastName:        user.LastName,
-		PasswordHash:    user.PasswordHash,
-		Groups:          groups,
-		Permissions:     permissions,
-		IsStaff:         user.IsStaff,
-		IsActive:        user.IsActive,
-		IsSuperuser:     user.IsSuperuser,
-		IsEmailVerified: user.IsEmailVerified,
-		LastLogin:       user.LastLogin,
-		DateJoined:      user.DateJoined,
-	}
 }

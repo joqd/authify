@@ -1,0 +1,57 @@
+package request
+
+import "time"
+
+// ================================== Register User
+type RegisterUserRequest struct {
+	Username    string  `json:"username" validate:"required,alphanum,max=30,min=3"`
+	FirstName   *string `json:"first_name" validate:"omitempty,alpha,max=30,min=2"`
+	LastName    *string `json:"last_name" validate:"omitempty,alpha,max=30,min=2"`
+	Email       string  `json:"email" validate:"required,email"`
+	Password    string  `json:"password" validate:"required,max=64,min=8"`
+	IsStaff     *bool   `json:"is_staff" validate:"omitempty"`
+	IsActive    *bool   `json:"is_active" validate:"omitempty"`
+	IsSuperuser *bool   `json:"is_superuser" validate:"omitempty"`
+}
+
+func (ru *RegisterUserRequest) SetDefaults() {
+	if ru.FirstName == nil {
+		def := ""
+		ru.FirstName = &def
+	}
+	if ru.LastName == nil {
+		def := ""
+		ru.LastName = &def
+	}
+	if ru.IsStaff == nil {
+		def := false
+		ru.IsStaff = &def
+	}
+	if ru.IsActive == nil {
+		def := true
+		ru.IsActive = &def
+	}
+	if ru.IsSuperuser == nil {
+		def := false
+		ru.IsSuperuser = &def
+	}
+}
+
+// ================================== Delete User
+type DeleteUserRequest struct {
+	ID uint64 `json:"id" validate:"required"`
+}
+
+// ================================== Update User
+type UpdateUserRequest struct {
+	Username        *string    `json:"username" validate:"omitempty,alphanum,max=30,min=3"`
+	FirstName       *string    `json:"first_name" validate:"omitempty,alpha,max=30,min=2"`
+	LastName        *string    `json:"last_name" validate:"omitempty,alpha,max=30,min=2"`
+	Email           *string    `json:"email" validate:"omitempty,email"`
+	IsStaff         *bool      `json:"is_staff" validate:"omitempty"`
+	IsActive        *bool      `json:"is_active" validate:"omitempty"`
+	IsSuperuser     *bool      `json:"is_superuser" validate:"omitempty"`
+	IsEmailVerified *bool      `json:"is_email_verified" validate:"omitempty"`
+	LastLogin       *time.Time `json:"last_login" validate:"omitempty"`
+	DateJoined      *time.Time `json:"date_joined" validate:"omitempty"`
+}

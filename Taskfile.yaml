@@ -10,3 +10,8 @@ tasks:
     cmds:
       - go run ./cmd/http/main.go
     silent: true
+  
+  swag:
+    cmds:
+      - swag init --generalInfo ./cmd/http/main.go --output ./docs --parseDependency --parseInternal
+    silect: true

@@ -1,0 +1,267 @@
+definitions:
+  github_com_joqd_authify_internal_adapter_server_dto_response.DeleteUserResponseWrapper:
+    properties:
+      ok:
+        type: boolean
+      result:
+        $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.DeletedUser'
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.DeletedUser:
+    properties:
+      id:
+        type: integer
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse:
+    properties:
+      description:
+        type: string
+      error_code:
+        type: integer
+      ok:
+        type: boolean
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.ListUserResponseWrapper:
+    properties:
+      ok:
+        type: boolean
+      result:
+        $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.RetrievedUsers'
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.RegisterUserResponseWrapper:
+    properties:
+      ok:
+        type: boolean
+      result:
+        $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.RegisteredUser'
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.RegisteredUser:
+    properties:
+      date_joined:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.RetrieveUserResponseWrapper:
+    properties:
+      ok:
+        type: boolean
+      result:
+        $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.RetrievedUser'
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.RetrievedUser:
+    properties:
+      date_joined:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      is_email_verified:
+        type: boolean
+      is_staff:
+        type: boolean
+      is_superuser:
+        type: boolean
+      last_login:
+        type: string
+      last_name:
+        type: string
+      username:
+        type: string
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.RetrievedUsers:
+    properties:
+      count:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.RetrievedUser'
+        type: array
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.UpdateUserResponseWrapper:
+    properties:
+      ok:
+        type: boolean
+      result:
+        $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.UpdatedUser'
+    type: object
+  github_com_joqd_authify_internal_adapter_server_dto_response.UpdatedUser:
+    properties:
+      date_joined:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      is_active:
+        type: boolean
+      is_staff:
+        type: boolean
+      is_superuser:
+        type: boolean
+      last_login:
+        type: string
+      last_name:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /users:
+    post:
+      description: Register new user
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.RegisterUserResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+      summary: Register user
+      tags:
+      - user
+  /users/:
+    get:
+      description: List of users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ListUserResponseWrapper'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+      summary: List of users
+      tags:
+      - user
+  /users/{id}:
+    delete:
+      description: Delete user by id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.DeleteUserResponseWrapper'
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+      summary: Delete user
+      tags:
+      - user
+    get:
+      description: Retrive user by id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.RetrieveUserResponseWrapper'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+      summary: Retrive user
+      tags:
+      - user
+    put:
+      description: Update user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.UpdateUserResponseWrapper'
+        "204":
+          description: No Content
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "409":
+          description: Conflict
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_response.ErrorResponse'
+      summary: Update user
+      tags:
+      - user
+swagger: "2.0"

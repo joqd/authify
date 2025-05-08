@@ -2,16 +2,35 @@
 
 version: '3'
 
-vars:
-  GREETING: Hello, World!
+dotenv: ['.env']
 
 tasks:
   dev:
+    desc: Start the HTTP development server
     cmds:
       - go run ./cmd/http/main.go
     silent: true
   
   swag:
+    desc: Generate Swagger API documentation using swag
     cmds:
       - swag init --generalInfo ./cmd/http/main.go --output ./docs --parseDependency --parseInternal
-    silect: true
+    silent: true
+
+  migrate:
+    desc: Apply database schema changes using GORM AutoMigrate
+    cmds: 
+      - go run ./cmd/migrate/main.go
+    silent: true
+
+  createsuperuser:
+    desc: Create a superuser account; usage >>> task createsuperuser -- <username> <password>
+    cmds:
+      - go run ./cmd/createsuperuser/main.go {{.CLI_ARGS}}
+    silent: true
+
+  export_schema:
+    desc: Export db schema
+    cmds:
+      - docker exec -t postgres_db pg_dump -U {{.POSTGRES_USER}} --schema-only --no-owner --no-privileges {{.POSTGRES_DB}} > schema.sql
+    silent: true

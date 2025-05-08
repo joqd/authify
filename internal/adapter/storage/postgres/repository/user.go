@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/jinzhu/copier"
 	"github.com/joqd/authify/internal/adapter/storage/postgres/model"
@@ -81,14 +82,14 @@ func (ur *userRepository) GetByID(ctx context.Context, id uint64) (*domain.User,
 func (ur *userRepository) DeleteByID(ctx context.Context, id uint64) error {
 	// DB action
 	var userModel model.UserModel
-	if err := ur.db.WithContext(ctx).Delete(&userModel, id).Error; err != nil {
-		ur.logger.Error("failed to delete user: id: %d, err: %v", id, err)
+	result := ur.db.WithContext(ctx).Delete(&userModel, id)
 
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return domain.ErrDataNotFound
-		}
+	if result.Error != nil {
+		return result.Error
+	}
 
-		return err
+	if result.RowsAffected == 0 {
+		return domain.ErrDataNotFound
 	}
 
 	return nil
@@ -144,4 +145,38 @@ func (ur *userRepository) Update(ctx context.Context, user *domain.User) (*domai
 	}
 
 	return &updated, nil
+}
+
+func (ur *userRepository) GetByUsername(ctx context.Context, username string) (*domain.User, error) {
+	var userModel model.UserModel
+
+	if err := ur.db.WithContext(ctx).Where("username = ?", username).First(&userModel).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, domain.ErrDataNotFound
+		}
+
+		return nil, err
+	}
+
+	var userDomain domain.User
+	if err := copier.CopyWithOption(&userDomain, &userModel, copier.Option{DeepCopy: true}); err != nil {
+		ur.logger.Errorf("failed to copy existing userModel to userDomain: %v", err)
+		return nil, domain.ErrCopier
+	}
+
+	return &userDomain, nil
+}
+
+
+func (ur *userRepository) UpdateLastLoginByID(ctx context.Context, id uint64) error {
+	if err := ur.db.WithContext(ctx).Model(&model.UserModel{}).Where("id = ?", id).Update("last_login", time.Now()).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return domain.ErrDataNotFound
+		}
+
+		ur.logger.Errorf("failed to find user by ID: %d: %v", id, err)
+		return err
+	}
+
+	return nil
 }

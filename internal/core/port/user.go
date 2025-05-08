@@ -13,6 +13,8 @@ type UserRepository interface {
 	DeleteByID(ctx context.Context, id uint64) error
 	List(ctx context.Context) ([]domain.User, error)
 	Update(ctx context.Context, user *domain.User) (*domain.User, error)
+	GetByUsername(ctx context.Context, username string) (*domain.User, error)
+	UpdateLastLoginByID(ctx context.Context, id uint64) error
 }
 
 type UserService interface {
@@ -21,6 +23,7 @@ type UserService interface {
 	Delete(ctx context.Context, id uint64) error
 	List(ctx context.Context) ([]domain.User, error)
 	Update(ctx context.Context, user *domain.User) (*domain.User, error)
+	Authenticate(ctx context.Context, username string, password string) (*domain.User, error)
 }
 
 type UserHandler interface {
@@ -29,4 +32,5 @@ type UserHandler interface {
 	Delete(c echo.Context) error
 	List(c echo.Context) error
 	Update(c echo.Context) error
+	Login(c echo.Context) error
 }

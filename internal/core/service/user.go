@@ -14,10 +14,10 @@ type userService struct {
 	logger *zap.SugaredLogger
 }
 
-func NewUserService(repo port.UserRepository, looger *zap.SugaredLogger) port.UserService {
+func NewUserService(repo port.UserRepository, logger *zap.SugaredLogger) port.UserService {
 	return &userService{
 		repo:   repo,
-		logger: looger,
+		logger: logger,
 	}
 }
 
@@ -59,4 +59,28 @@ func (us *userService) List(ctx context.Context) ([]domain.User, error) {
 
 func (us *userService) Update(ctx context.Context, user *domain.User) (*domain.User, error) {
 	return us.repo.Update(ctx, user)
+}
+
+func (us *userService) Authenticate(ctx context.Context, username string, password string) (*domain.User, error) {
+	user, err := us.repo.GetByUsername(ctx, username)
+	if err != nil {
+		return nil, err
+	}
+
+	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, domain.ErrInternal
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
+	if err != nil {
+		us.logger.Infof("invalid credentials: hash: %s; password: %s", user.PasswordHash, hashed)
+		return nil, domain.ErrInvalidCredentials
+	}
+
+	if err := us.repo.UpdateLastLoginByID(ctx, user.ID); err != nil {
+		us.logger.Errorf("failed to update last_login: id: %d; err: %v", user.ID, err)
+	}
+
+	return user, nil
 }

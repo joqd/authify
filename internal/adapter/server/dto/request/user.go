@@ -55,3 +55,9 @@ type UpdateUserRequest struct {
 	LastLogin       *time.Time `json:"last_login" validate:"omitempty"`
 	DateJoined      *time.Time `json:"date_joined" validate:"omitempty"`
 }
+
+// ================================== Login User
+type LoginRequest struct {
+	Username string `json:"username" validate:"required,alphanum,max=30,min=3"`
+	Password string `json:"password" validate:"required,max=64,min=8"`
+}

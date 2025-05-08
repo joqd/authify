@@ -78,3 +78,13 @@ type UpdateUserResponseWrapper struct {
 	BaseResponse
 	Result UpdatedUser `json:"result"`
 }
+
+// ================================== Login User
+type LoginedUser struct {
+	AccessToken string `json:"access_token"`
+}
+
+type LoginUserResponseWrapper struct {
+	BaseResponse
+	Result LoginedUser `json:"result"`
+}

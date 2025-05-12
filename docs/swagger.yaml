@@ -1,4 +1,52 @@
 definitions:
+  github_com_joqd_authify_internal_adapter_server_dto_request.RegisterUserRequest:
+    properties:
+      email:
+        description: |-
+          Email of the user
+          required: true
+        example: some@domain.com
+        type: string
+      first_name:
+        example: john
+        maxLength: 30
+        minLength: 2
+        type: string
+      is_active:
+        example: true
+        type: boolean
+      is_staff:
+        example: false
+        type: boolean
+      is_superuser:
+        example: false
+        type: boolean
+      last_name:
+        example: doe
+        maxLength: 30
+        minLength: 2
+        type: string
+      password:
+        description: |-
+          Password of the user
+          required: true
+        example: strongpassword
+        maxLength: 64
+        minLength: 8
+        type: string
+      username:
+        description: |-
+          Username of the user
+          required: true
+        example: admin
+        maxLength: 30
+        minLength: 3
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
   github_com_joqd_authify_internal_adapter_server_dto_response.DeleteUserResponseWrapper:
     properties:
       ok:
@@ -126,6 +174,13 @@ paths:
   /users:
     post:
       description: Register new user
+      parameters:
+      - description: Register user details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_joqd_authify_internal_adapter_server_dto_request.RegisterUserRequest'
       produces:
       - application/json
       responses:

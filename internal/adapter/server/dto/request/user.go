@@ -3,15 +3,27 @@ package request
 import "time"
 
 // ================================== Register User
+// RegisterUserRequest defines register payload
+// swagger:model RegisterUserRequest
 type RegisterUserRequest struct {
-	Username    string  `json:"username" validate:"required,alphanum,max=30,min=3"`
-	FirstName   *string `json:"first_name" validate:"omitempty,alpha,max=30,min=2"`
-	LastName    *string `json:"last_name" validate:"omitempty,alpha,max=30,min=2"`
-	Email       string  `json:"email" validate:"required,email"`
-	Password    string  `json:"password" validate:"required,max=64,min=8"`
-	IsStaff     *bool   `json:"is_staff" validate:"omitempty"`
-	IsActive    *bool   `json:"is_active" validate:"omitempty"`
-	IsSuperuser *bool   `json:"is_superuser" validate:"omitempty"`
+	// Username of the user
+	// required: true
+	Username string `json:"username" validate:"required,alphanum,max=30,min=3" example:"admin"`
+
+	FirstName *string `json:"first_name" validate:"omitempty,alpha,max=30,min=2" example:"john"`
+	LastName  *string `json:"last_name" validate:"omitempty,alpha,max=30,min=2" example:"doe"`
+
+	// Email of the user
+	// required: true
+	Email string `json:"email" validate:"required,email" example:"some@domain.com"`
+
+	// Password of the user
+	// required: true
+	Password string `json:"password" validate:"required,max=64,min=8" example:"strongpassword"`
+
+	IsStaff     *bool `json:"is_staff" validate:"omitempty" example:"false"`
+	IsActive    *bool `json:"is_active" validate:"omitempty" example:"true"`
+	IsSuperuser *bool `json:"is_superuser" validate:"omitempty" example:"false"`
 }
 
 func (ru *RegisterUserRequest) SetDefaults() {

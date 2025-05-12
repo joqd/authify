@@ -27,10 +27,14 @@ func (uh *userHandler) Login(c echo.Context) error {
 		return handler.RespondError(c, http.StatusUnprocessableEntity, response.DescValidationFailed)
 	}
 
-	user, err := uh.userService.Authenticate(c.Request().Context(), req.Username, req.Password)
+	user, err := uh.userService.LoginSuperuser(c.Request().Context(), req.Username, req.Password)
 	if err != nil {
+		if errors.Is(err, domain.ErrForbidden) {
+			return handler.RespondError(c, http.StatusForbidden, response.DescForbidden)
+		}
+
 		if errors.Is(err, domain.ErrInvalidCredentials) {
-			return handler.RespondError(c, http.StatusUnauthorized, response.DescUnauthorized)
+			return handler.RespondError(c, http.StatusUnauthorized, response.DescInvalidCredentials)
 		}
 
 		return handler.RespondError(c, http.StatusInternalServerError, response.DescInternalError)

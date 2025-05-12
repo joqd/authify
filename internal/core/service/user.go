@@ -5,6 +5,7 @@ import (
 
 	"github.com/joqd/authify/internal/core/domain"
 	"github.com/joqd/authify/internal/core/port"
+	"github.com/joqd/authify/internal/core/util"
 	"go.uber.org/zap"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -22,7 +23,7 @@ func NewUserService(repo port.UserRepository, logger *zap.SugaredLogger) port.Us
 }
 
 func (us *userService) Register(ctx context.Context, user *domain.User) (*domain.User, error) {
-	hashed, err := bcrypt.GenerateFromPassword([]byte(user.PasswordHash), bcrypt.DefaultCost)
+	hashed, err := util.HashSecret(user.PasswordHash)
 	if err != nil {
 		us.logger.Errorf("failed to hash password: %v", err)
 		return nil, err
@@ -61,20 +62,18 @@ func (us *userService) Update(ctx context.Context, user *domain.User) (*domain.U
 	return us.repo.Update(ctx, user)
 }
 
-func (us *userService) Authenticate(ctx context.Context, username string, password string) (*domain.User, error) {
+func (us *userService) LoginSuperuser(ctx context.Context, username string, password string) (*domain.User, error) {
 	user, err := us.repo.GetByUsername(ctx, username)
 	if err != nil {
 		return nil, err
 	}
 
-	hashed, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return nil, domain.ErrInternal
+	if !user.IsSuperuser {
+		return nil, domain.ErrForbidden
 	}
 
 	err = bcrypt.CompareHashAndPassword([]byte(user.PasswordHash), []byte(password))
 	if err != nil {
-		us.logger.Infof("invalid credentials: hash: %s; password: %s", user.PasswordHash, hashed)
 		return nil, domain.ErrInvalidCredentials
 	}
 

@@ -26,7 +26,7 @@ var (
 	// ErrInvalidToken is an error for when the access token is invalid
 	ErrInvalidToken = errors.New("access token is invalid")
 	// ErrInvalidCredentials is an error for when the credentials are invalid
-	ErrInvalidCredentials = errors.New("invalid email or password")
+	ErrInvalidCredentials = errors.New("invalid username or password")
 	// ErrEmptyAuthorizationHeader is an error for when the authorization header is empty
 	ErrEmptyAuthorizationHeader = errors.New("authorization header is not provided")
 	// ErrInvalidAuthorizationHeader is an error for when the authorization header is invalid

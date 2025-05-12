@@ -8,12 +8,11 @@ import (
 	"github.com/joqd/authify/internal/adapter/config"
 	"github.com/joqd/authify/internal/adapter/logger"
 	"github.com/joqd/authify/internal/adapter/storage"
-	echojwt "github.com/labstack/echo-jwt"
 	"github.com/labstack/echo/v4"
-	"golang.org/x/time/rate"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"go.uber.org/zap"
+	"golang.org/x/time/rate"
 )
 
 type Server struct {
@@ -47,7 +46,6 @@ func (s *Server) Start() {
 	s.app.Use(middleware.Recover())
 	s.app.Use(middleware.Logger())
 	s.app.Use(middleware.RateLimiter(middleware.NewRateLimiterMemoryStore(rate.Limit(20))))
-	s.app.Use(echojwt.JWT([]byte(s.conf.JWTSecretKey)))
 
 	s.SetupRoutes()
 

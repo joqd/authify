@@ -14,6 +14,17 @@
                     "user"
                 ],
                 "summary": "Register user",
+                "parameters": [
+                    {
+                        "description": "Register user details",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/github_com_joqd_authify_internal_adapter_server_dto_request.RegisterUserRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -219,6 +230,59 @@
         }
     },
     "definitions": {
+        "github_com_joqd_authify_internal_adapter_server_dto_request.RegisterUserRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "email": {
+                    "description": "Email of the user\nrequired: true",
+                    "type": "string",
+                    "example": "some@domain.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 2,
+                    "example": "john"
+                },
+                "is_active": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "is_staff": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "is_superuser": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "last_name": {
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 2,
+                    "example": "doe"
+                },
+                "password": {
+                    "description": "Password of the user\nrequired: true",
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 8,
+                    "example": "strongpassword"
+                },
+                "username": {
+                    "description": "Username of the user\nrequired: true",
+                    "type": "string",
+                    "maxLength": 30,
+                    "minLength": 3,
+                    "example": "admin"
+                }
+            }
+        },
         "github_com_joqd_authify_internal_adapter_server_dto_response.DeleteUserResponseWrapper": {
             "type": "object",
             "properties": {

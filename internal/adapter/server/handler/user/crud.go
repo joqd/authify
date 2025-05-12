@@ -17,6 +17,7 @@ import (
 // @Description Register new user
 // @Tags user
 // @Produce json
+// @Param request body request.RegisterUserRequest true "Register user details"
 // @Success 201 {object} response.RegisterUserResponseWrapper
 // @Failure 400 {object} response.ErrorResponse
 // @Failure 422 {object} response.ErrorResponse

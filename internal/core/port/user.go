@@ -23,7 +23,7 @@ type UserService interface {
 	Delete(ctx context.Context, id uint64) error
 	List(ctx context.Context) ([]domain.User, error)
 	Update(ctx context.Context, user *domain.User) (*domain.User, error)
-	Authenticate(ctx context.Context, username string, password string) (*domain.User, error)
+	LoginSuperuser(ctx context.Context, username string, password string) (*domain.User, error)
 }
 
 type UserHandler interface {

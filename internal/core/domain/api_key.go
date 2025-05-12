@@ -1,11 +1,16 @@
 package domain
 
-import "time"
+import (
+	"time"
+)
 
 type APIKey struct {
-	Key       string
-	Secret    string
+	ID        uint
+	Key       *string
+	KeyHash   string
 	Owner     string
+	Name      string
+	IsActive  bool
 	ExpiresAt time.Time
 	CreatedAt time.Time
 }
